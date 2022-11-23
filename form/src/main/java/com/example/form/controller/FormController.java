@@ -1,8 +1,7 @@
-
-
 package com.example.form.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,17 +16,20 @@ public class FormController {
 	@Value("${app.title}")
 	private String appTitle;
 	
+	
 	@GetMapping("/")
-	 public String greetingForm(Model model) {
+	 public String greetingForm(Model model, OAuth2AuthenticationToken auth) {
 	    model.addAttribute("form", new Form());
 	    model.addAttribute("appTitle", appTitle);
+	    model.addAttribute("userName", auth.getName());
 	    return "form";
 	  }
 	
 	@PostMapping("/save")
-	public String saveForm(@ModelAttribute Form form, Model model) {
+	public String saveForm(@ModelAttribute Form form, Model model, OAuth2AuthenticationToken auth) {
 		model.addAttribute("form",form);
 		model.addAttribute("appTitle", appTitle);
+		model.addAttribute("userName", auth.getName());
 		return "form";
 	}
 }
